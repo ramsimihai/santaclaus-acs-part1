@@ -8,6 +8,7 @@ import fileio.InputLoader;
 //import fileio.Writer;
 
 import org.json.simple.JSONArray;
+import workshop.Santa;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +37,9 @@ public final class Main {
 
         File outputDirectory = new File(Constants.RESULT_PATH);
 
+        Checker checker = new Checker();
+        checker.deleteFiles(outputDirectory.listFiles());
+
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             String filename = file.getPath().substring(10);
             System.out.println(filename);
@@ -45,13 +49,12 @@ public final class Main {
 
             boolean isCreated = out.createNewFile();
 
-            // TODO: delete fisierele puli
-            //if (isCreated) {
+            if (isCreated) {
                 action(file.getAbsolutePath(), filepath);
-            //}
+            }
         }
 
-        Checker.calculateScore();
+        checker.calculateScore();
     }
 
     /**
@@ -62,7 +65,13 @@ public final class Main {
     public static void action(final String filePath1, final String filePath2) throws IOException {
         InputLoader inputLoader = new InputLoader(filePath1);
         Input input = inputLoader.readData();
-        System.out.println(input);
+
+        Santa santa = Santa.getInstance();
+        santa = new Santa(input.getNoYears(), input.getSantasBudget());
+        santa.addInitialData(input.getInitialData());
+        santa.addAnnualChanges(input.getAnnualChanges());
+
+        System.out.println(santa);
 //        Writer fileWriter = new Writer(filePath2);
 //        JSONArray arrayResult;
 //

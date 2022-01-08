@@ -34,7 +34,7 @@ public class Input {
 
     @Override
     public String toString() {
-        return "Input{" +
+        return "{" +
                 "noYears=" + noYears +
                 ", santasBudget=" + santasBudget +
                 ", initialData=" + initialData +

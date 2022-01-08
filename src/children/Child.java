@@ -1,8 +1,11 @@
-package fileio;
+package children;
+
+import fileio.ChildrenInput;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public final class ChildrenInput {
+public class Child {
     private final int id;
     private final String lastName;
     private final String firstName;
@@ -11,13 +14,13 @@ public final class ChildrenInput {
     private final Double niceScore;
     private final ArrayList<String> giftsPreferences;
 
-    public ChildrenInput(final int id,
-                         final String lastName,
-                         final String firstName,
-                         final int age,
-                         final String city,
-                         final Double niceScore,
-                         final ArrayList<String> giftsPreferences) {
+    public Child(final int id,
+                 final String lastName,
+                 final String firstName,
+                 final int age,
+                 final String city,
+                 final Double niceScore,
+                 final ArrayList<String> giftsPreferences) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -25,6 +28,16 @@ public final class ChildrenInput {
         this.city = city;
         this.niceScore = niceScore;
         this.giftsPreferences = giftsPreferences;
+    }
+
+    public Child() {
+        this.id = 0;
+        this.lastName = null;
+        this.firstName = null;
+        this.age = 0;
+        this.city = null;
+        this.niceScore = 0.0;
+        this.giftsPreferences = null;
     }
 
     public int getId() {

@@ -1,13 +1,13 @@
-package fileio;
+package gifts;
 
-public class GiftInput {
+public class Gift {
     private final String productName;
     private final Double price;
     private final String category;
 
-    public GiftInput(final String productName,
-                     final double price,
-                     final String category) {
+    public Gift(final String productName,
+                 final double price,
+                 final String category) {
         this.productName = productName;
         this.price = price;
         this.category = category;

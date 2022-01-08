@@ -1,13 +1,13 @@
-package fileio;
+package children;
 
 import java.util.ArrayList;
 
-public class ChildrenUpdatesInput {
+public class ChildUpdates {
     private final int id;
     private final Double niceScore;
     private final ArrayList<String> giftsPreferences;
 
-    public ChildrenUpdatesInput(final int id,
+    public ChildUpdates(final int id,
                                 final Double niceScore,
                                 final ArrayList<String> giftsPreferences) {
         this.id = id;

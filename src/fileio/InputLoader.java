@@ -67,7 +67,7 @@ public class InputLoader {
             }
 
             if (jsonChanges != null) {
-                List<ChangeOfTheYear> changes = new ArrayList<>();
+                List<ChangeOfTheYearInput> changes = new ArrayList<>();
 
                 for (Object jsonChange : jsonChanges) {
                     ArrayList<ChildrenInput> children = new ArrayList<>();
@@ -115,7 +115,7 @@ public class InputLoader {
                         }
                     }
 
-                    changes.add(new ChangeOfTheYear(newSantaBudget, gifts, children, childrenUpdates));
+                    changes.add(new ChangeOfTheYearInput(newSantaBudget, gifts, children, childrenUpdates));
                 }
                 annualChanges = new AnnualChangesInput(changes);
             } else {
@@ -125,7 +125,7 @@ public class InputLoader {
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
-        System.out.println("SALUTAREEEEE");
+
         return new Input(noYears, santaBudget, initialData, annualChanges);
     }
 }

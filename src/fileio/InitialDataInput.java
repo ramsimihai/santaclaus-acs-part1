@@ -23,7 +23,7 @@ public class InitialDataInput {
 
     @Override
     public String toString() {
-        return "InitialDataInput{" +
+        return "{" +
                 "childrenList=" + childrenList +
                 ", giftsList=" + giftsList +
                 '}';

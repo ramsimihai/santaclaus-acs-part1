@@ -9,9 +9,20 @@ import java.io.IOException;
 
 public final class Checker {
 
-    private Checker() {
+    public Checker() {
         //constructor for checkstyle
     }
+
+    public void deleteFiles(final File[] directory) {
+        if (directory != null) {
+            for (File file : directory) {
+                if (!file.delete()) {
+                    System.out.println("nu s-a sters");
+                }
+            }
+        }
+    }
+
     /**
      * This method is used to calculate total score of the implementation and checkstyle
      */

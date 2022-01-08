@@ -1,18 +1,22 @@
-package fileio;
+package updates;
+
+import children.Child;
+import children.ChildUpdates;
+import gifts.Gift;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeOfTheYear {
     private final Double newSantaBudget;
-    private final List<GiftInput> newGifts;
-    private final List<ChildrenInput> newChildren;
-    private final List<ChildrenUpdatesInput> newUpdates;
+    private final List<Gift> newGifts;
+    private final List<Child> newChildren;
+    private final List<ChildUpdates> newUpdates;
 
     public ChangeOfTheYear(final Double newSantaBudget,
-                           final ArrayList<GiftInput> newGifts,
-                           final ArrayList<ChildrenInput> newChildren,
-                           final ArrayList<ChildrenUpdatesInput> newUpdates) {
+                           final ArrayList<Gift> newGifts,
+                           final ArrayList<Child> newChildren,
+                           final ArrayList<ChildUpdates> newUpdates) {
         this.newSantaBudget = newSantaBudget;
         this.newGifts = newGifts;
         this.newChildren = newChildren;
@@ -23,21 +27,21 @@ public class ChangeOfTheYear {
         return newSantaBudget;
     }
 
-    public List<ChildrenInput> getNewChildren() {
+    public List<Gift> getNewGifts() {
+        return newGifts;
+    }
+
+    public List<Child> getNewChildren() {
         return newChildren;
     }
 
-    public List<ChildrenUpdatesInput> getNewUpdates() {
+    public List<ChildUpdates> getNewUpdates() {
         return newUpdates;
-    }
-
-    public List<GiftInput> getNewGifts() {
-        return newGifts;
     }
 
     @Override
     public String toString() {
-        return "ChangeOfTheYear{" +
+        return "{" +
                 "newSantaBudget=" + newSantaBudget +
                 ", newGifts=" + newGifts +
                 ", newChildren=" + newChildren +
