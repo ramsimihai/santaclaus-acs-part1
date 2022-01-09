@@ -26,7 +26,7 @@ public final class Main {
     }
     /**
      * Call the main checker and the coding style checker
-     *
+     * opens the tests files and also creates new output filess
      * @param args from command line
      * @throws IOException in case of exceptions to reading / writing
      */
@@ -63,22 +63,30 @@ public final class Main {
      * @throws IOException in case of exceptions to reading / writing
      */
     public static void action(final String filePath1, final String filePath2) throws IOException {
+        // creates a new inputLoader to extract data from a path
         InputLoader inputLoader = new InputLoader(filePath1);
         Input input = inputLoader.readData();
 
+        // creates a writer to open a file from a path
         Writer fileWriter = new Writer(filePath2);
         JSONObject objectResult = new JSONObject();
 
+        // gets a santa instance that will do the work of delivering gifts to children
         Santa santa = Santa.getInstance();
+
+        // extracts data from the input and put it into the santa's database
         santa.setSantasBudget(input.getSantasBudget());
         santa.setNoYears(input.getNoYears());
         santa.addInitialData(input.getInitialData());
         santa.addAnnualChanges(input.getAnnualChanges());
 
+        // adds the initial change (of the first year) to the annual changes
+        // for automation purposes
         ChangeOfTheYear initialChange = santa.addChange();
         santa.getAnnualChanges().getChanges().add(0, initialChange);
         santa.setActualYear(0);
 
+        // uploads the output into a JSON and write into the output file
         objectResult.put("annualChildren", santa.startDelivery());
         fileWriter.closeJSON(objectResult);
     }

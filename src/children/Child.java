@@ -21,7 +21,7 @@ public class Child {
     /**
      * an arraylist of niceScores
      * a niceScore is added every year
-     * */
+     */
     private ArrayList<Double> niceScore = new ArrayList<>();
     /** arraylist of gift preferences from where the child will get gifts */
     private final ArrayList<String> giftsPreferences;
