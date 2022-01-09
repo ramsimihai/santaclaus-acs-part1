@@ -23,12 +23,19 @@ __Classes__
 
 - InputLoader -> input loader used to extract the input data from every JSON object and collect it
                 into input classes such as:
+                
               -> Input --> noYears (field)
+              
                        --> santasBudget (field)
+                       
                        --> field of InitialDataInput (class)   --> ChildrenInput
+                       
                                                                --> GiftInput
+                                                               
                        --> field of AnnualChangesInput (class) --> ChangeOfTheYear --> GiftInput
+                       
                                                                                 --> ChildrenInput
+                                                                                
                                                                                 --> ChildrenUpdates
 
 all the input classes mentioned have the basic parameters for the real classes
@@ -45,16 +52,26 @@ all the input classes mentioned have the basic parameters for the real classes
             of a given list of gifts.
         -> every year changes are made to the database and a simulation of delivery starts again
         -> contains the following fields:
+        
                 -> noYears of the over-all delivery simulation
+                
                 -> santasBudget the overall budget of santa
+                
                 -> initialData the initial Data extracted from the input (the first simulation)
+                
                 -> annualChanges the following noYears extracted data from the input (next noYears
                 deivery)
+                
                 -> children -- a list of children that can receive gifts
+                
                 -> availableGifts -- a list of all available gifts that can be given to children
+                
                 -> actualYear -- field that contains the actual Year of the simulation to know
+                
                 what data should we use in the simulation
+                
                 -> budgetUnit -- something that is used to calculate every children budget
+                
 
 `memory`
 - InitialData -> contains the initial data extracted from the input that is going to be added
@@ -69,26 +86,39 @@ all the input classes mentioned have the basic parameters for the real classes
 
 `children`
 - Child -> contains the following:
+
             -> the fields representative for a child
+            
             -> a niceScore list that is updated every year
+            
             -> a strategy that calculates the averageScore of every children
+            
             -> the initialBudget assigned to the child an auxiliary field for calculating
             the delivery of gifts
+            
             -> a receivedGifts in every year
+            
             -> a getJSON method to get an output JSONObject that contains all the data of
             the child
+            
             -> basic methods
 
 - ChildUpdates -> contains updates of a corresponding child every year
 
 `scores`
 - AverageScoreStrategy -> an interface used to get the averageScore for every child
+- 
 - AverageScoreStrategyFactory -> class used to create 4 different types of strategies
                                 to calculate children averageScore
+                                
                               -> they are the following:
+                              
                                     -> BabyStrategy: they get a 10 out of 10
+                                    
                                     -> KidStrategy: normal average
+                                    
                                     -> TeenStrategy: some weird average based on a formula
+                                    
                                     -> YoungAdultStrategy: they have a null strategy
                                     cause they arent wanted in the children list
 
