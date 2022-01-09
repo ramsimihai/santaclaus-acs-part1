@@ -14,9 +14,9 @@ public class ChangeOfTheYear {
     private final List<ChildUpdates> newUpdates;
 
     public ChangeOfTheYear(final Double newSantaBudget,
-                           final ArrayList<Gift> newGifts,
-                           final ArrayList<Child> newChildren,
-                           final ArrayList<ChildUpdates> newUpdates) {
+                           final List<Gift> newGifts,
+                           final List<Child> newChildren,
+                           final List<ChildUpdates> newUpdates) {
         this.newSantaBudget = newSantaBudget;
         this.newGifts = newGifts;
         this.newChildren = newChildren;

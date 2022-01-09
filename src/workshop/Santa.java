@@ -6,10 +6,12 @@ import fileio.*;
 import gifts.Gift;
 import memory.AnnualChanges;
 import memory.InitialData;
+import scores.AverageScoreStrategy;
+import scores.AverageScoreStrategyFactory;
 import updates.ChangeOfTheYear;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Santa {
     private static Santa santa = null;
@@ -17,16 +19,21 @@ public class Santa {
     private Double santasBudget = 0.0;
     private InitialData initialData = new InitialData();
     private AnnualChanges annualChanges = new AnnualChanges();
+    private List<Child> children = new ArrayList<>();
+    private List<Gift> availableGifts = new ArrayList<>();
+    private int actualYear = 0;
+    private Double budgetUnit = 0.0;
+    private List<Child> rewardedChildren = new ArrayList<>();
 
     private Santa() {
     }
 
-    public Santa(final int noYears,
-                 final Double santasBudget) {
-        this.noYears = noYears;
+    public void setSantasBudget(Double santasBudget) {
         this.santasBudget = santasBudget;
-        this.initialData = null;
-        this.annualChanges = null;
+    }
+
+    public void setNoYears(int noYears) {
+        this.noYears = noYears;
     }
 
     /**
@@ -40,12 +47,176 @@ public class Santa {
         return santa;
     }
 
+    public void incrementsAge() {
+        if (actualYear == 0) {
+            return;
+        }
+
+        for (Child child : children) {
+            child.setAge(child.getAge() + 1);
+        }
+    }
+
+    public void addNewChildren(final ChangeOfTheYear change) {
+        if (actualYear == 0 || change.getNewChildren() == null)
+            return;
+
+        for (Child child : change.getNewChildren()) {
+            children.add(child);
+        }
+    }
+
+    public void deleteYoungAdults() {
+        children.removeIf(child -> child.getAge() > 18);
+    }
+
+    public void sortChildren() {
+        Comparator<Child> idComparator = Comparator.comparing(Child::getId);
+
+        children = children.stream().sorted(idComparator).collect(Collectors.toList());
+    }
+
+    public void sortGifts() {
+        Comparator<Gift> priceComparator = Comparator.comparing(Gift::getPrice);
+        Comparator<Gift> categoryComparator = Comparator.comparing(Gift::getCategory).thenComparing(priceComparator);
+
+        availableGifts = availableGifts.stream().sorted(categoryComparator).collect(Collectors.toList());
+    }
+
+    public void updateChildren(final ChangeOfTheYear change) {
+        if (actualYear == 0 || change.getNewUpdates() == null) {
+            return;
+        }
+        List<ChildUpdates> updates = change.getNewUpdates();
+
+        for (ChildUpdates update : updates) {
+            Child updatedChild = null;
+            for (Child child : children) {
+                if (update.getId() == child.getId()) {
+                    updatedChild = child;
+
+                    break;
+                }
+            }
+
+            if (updatedChild != null) {
+                if (update.getNiceScore() != 0.0) {
+                    updatedChild.getNiceScore().add(update.getNiceScore());
+                }
+
+                List<String> preferences = updatedChild.getGiftsPreferences();
+
+                // lista noua
+                List<String> duplicatedNewPreferences = update.getGiftsPreferences();
+                // lista noua care e ok si all good
+                List<String> uniqueNewPreferences = new ArrayList<>(
+                        new LinkedHashSet<>(duplicatedNewPreferences));
+
+                Collections.reverse(uniqueNewPreferences);
+
+                for (String preference : uniqueNewPreferences) {
+                    if (preferences.contains(preference)) {
+                        preferences.remove(preference);
+                    }
+
+                    preferences.add(0, preference);
+                }
+            }
+        }
+    }
+
+    public void addNewGifts(final ChangeOfTheYear change) {
+        if (actualYear == 0 || change.getNewGifts() == null) {
+            return;
+        }
+
+        for (Gift gift : change.getNewGifts()) {
+            availableGifts.add(gift);
+        }
+    }
+
+    public void initializeBudget(final ChangeOfTheYear change) {
+        santasBudget = change.getNewSantaBudget();
+        Double overallAverageScore = 0.0;
+        for (Child child : children) {
+            overallAverageScore += child.getAverageScore();
+        }
+
+        if (overallAverageScore != 0.0) {
+            budgetUnit = santasBudget / overallAverageScore;
+        } else {
+            budgetUnit = santasBudget;
+        }
+
+        for (Child child : children) {
+            child.setBudget(child.getAverageScore() * budgetUnit);
+            child.setInitialBudget(child.getAverageScore() * budgetUnit);
+        }
+    }
+
+    public void getTypesOfChildren() {
+        AverageScoreStrategyFactory factory = new AverageScoreStrategyFactory();
+
+        for (Child child : children) {
+            AverageScoreStrategy newStrategy = factory.createStrategy(child.getAge(),
+                    child.getNiceScore());
+            child.setStrategy(newStrategy);
+            child.setAverageScore(child.getStrategy().getAverageScore());
+        }
+    }
+
+    public void yearDelivery() {
+        rewardedChildren.clear();
+        for (Child child : children) {
+            child.getReceivedGifts().clear();
+            ArrayList<String> preferences = child.getGiftsPreferences();
+
+            for (String preferredGift : preferences) {
+                for (Gift singleGift : availableGifts) {
+                    if (singleGift.getCategory().equals(preferredGift) &&
+                        singleGift.getPrice() < child.getAssignedBudget()) {
+                        child.getReceivedGifts().add(singleGift);
+                        child.setBudget(child.getAssignedBudget()
+                                - singleGift.getPrice());
+// ai grija
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void startDelivery() {
+        for (actualYear = 0; actualYear <= noYears; actualYear++) {
+            ChangeOfTheYear annualChange = annualChanges.getChanges().get(actualYear);
+            incrementsAge();
+            addNewChildren(annualChange);
+            deleteYoungAdults();
+            sortChildren();
+            updateChildren(annualChange);
+
+
+            addNewGifts(annualChange);
+            sortGifts();
+
+            getTypesOfChildren();
+            initializeBudget(annualChange);
+
+            yearDelivery();
+            for (Child child : children) {
+        System.out.println(child);
+            }
+        }
+    }
+
     public void addInitialData(InitialDataInput input) {
         List<ChildrenInput> childrenInput = input.getChildrenList();
         List<GiftInput> giftsInput = input.getGiftsList();
         List<Child> childrenList = santa.addChildren(childrenInput);
         List<Gift> giftsList = santa.addGifts(giftsInput);
 
+        santa.setChildren(childrenList);
+        santa.setAvailableGifts(giftsList);
         initialData = new InitialData(childrenList, giftsList);
     }
 
@@ -121,6 +292,16 @@ public class Santa {
         return updates;
     }
 
+    public ChangeOfTheYear addChange() {
+        ChangeOfTheYear newChange = new ChangeOfTheYear(santasBudget,
+                santa.getInitialData().getGiftsList(),
+                santa.getInitialData().getChildrenList(),
+                new ArrayList<ChildUpdates>()
+        );
+
+        return newChange;
+    }
+
     public int getNoYears() {
         return noYears;
     }
@@ -135,6 +316,26 @@ public class Santa {
 
     public AnnualChanges getAnnualChanges() {
         return annualChanges;
+    }
+
+    public List<Child> getChildren() {
+        return children;
+    }
+
+    public List<Gift> getAvailableGifts() {
+        return availableGifts;
+    }
+
+    public void setActualYear(int actualYear) {
+        this.actualYear = actualYear;
+    }
+
+    public void setAvailableGifts(List<Gift> availableGifts) {
+        this.availableGifts = availableGifts;
+    }
+
+    public void setChildren(List<Child> children) {
+        this.children = children;
     }
 
     @Override

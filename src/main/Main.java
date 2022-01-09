@@ -8,6 +8,7 @@ import fileio.InputLoader;
 //import fileio.Writer;
 
 import org.json.simple.JSONArray;
+import updates.ChangeOfTheYear;
 import workshop.Santa;
 
 import java.io.File;
@@ -66,24 +67,19 @@ public final class Main {
         InputLoader inputLoader = new InputLoader(filePath1);
         Input input = inputLoader.readData();
 
+//        Writer fileWriter = new Writer(filePath2);
+//        JSONArray arrayResult;
         Santa santa = Santa.getInstance();
-        santa = new Santa(input.getNoYears(), input.getSantasBudget());
+        santa.setSantasBudget(input.getSantasBudget());
+        santa.setNoYears(input.getNoYears());
+        santa.setActualYear(0);
         santa.addInitialData(input.getInitialData());
         santa.addAnnualChanges(input.getAnnualChanges());
 
-        System.out.println(santa);
-//        Writer fileWriter = new Writer(filePath2);
-//        JSONArray arrayResult;
-//
-//        Database videoPlatform = Database.getInstance();
-//        videoPlatform.addActors(input.getActors());
-//        videoPlatform.addMovies(input.getMovies());
-//        videoPlatform.addShows(input.getSerials());
-//        videoPlatform.addVideos();
-//        videoPlatform.addUsers(input.getUsers());
-//
-//        arrayResult = videoPlatform.addCommands(input.getCommands());
-//        videoPlatform.clear();
+        ChangeOfTheYear initialChange = santa.addChange();
+        santa.getAnnualChanges().getChanges().add(0, initialChange);
+
+        santa.startDelivery();
 //
 //        fileWriter.closeJSON(arrayResult);
     }
