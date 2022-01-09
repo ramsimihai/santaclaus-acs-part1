@@ -4,12 +4,15 @@ import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 
-public class Utils {
+public final class Utils {
+    /**
+     * default constructor for checkstyle
+     */
     private Utils() {
     }
 
     /**
-     * Transforms an array of JSON's into an array of strings
+     * Transforms an array of JSONs into an array of strings
      * @param array of JSONs
      * @return a list of strings
      */

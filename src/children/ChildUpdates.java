@@ -7,32 +7,38 @@ public class ChildUpdates {
     private final Double niceScore;
     private final ArrayList<String> giftsPreferences;
 
+    /**
+     * constructor for a child updates object
+     * @param id of the child wanted to be updated
+     * @param niceScore the newNiceScore for the list
+     * @param giftsPreferences the new preferences
+     */
     public ChildUpdates(final int id,
-                                final Double niceScore,
-                                final ArrayList<String> giftsPreferences) {
+                        final Double niceScore,
+                        final ArrayList<String> giftsPreferences) {
         this.id = id;
         this.niceScore = niceScore;
         this.giftsPreferences = giftsPreferences;
     }
 
-    public ArrayList<String> getGiftsPreferences() {
+    public final ArrayList<String> getGiftsPreferences() {
         return giftsPreferences;
     }
 
-    public Double getNiceScore() {
+    public final Double getNiceScore() {
         return niceScore;
     }
 
-    public int getId() {
+    public final int getId() {
         return id;
     }
 
     @Override
-    public String toString() {
-        return "{" +
-                "id=" + id +
-                ", niceScore=" + niceScore +
-                ", giftsPreferences=" + giftsPreferences +
-                '}';
+    public final String toString() {
+        return "{"
+                + "id=" + id
+                + ", niceScore=" + niceScore
+                + ", giftsPreferences=" + giftsPreferences
+                + '}';
     }
 }

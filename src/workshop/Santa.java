@@ -1,21 +1,35 @@
 package workshop;
 
+import fileio.AnnualChangesInput;
+import fileio.ChangeOfTheYearInput;
+import fileio.ChildrenInput;
+import fileio.ChildrenUpdatesInput;
+import fileio.GiftInput;
+import fileio.InitialDataInput;
+
 import children.Child;
 import children.ChildUpdates;
-import fileio.*;
 import gifts.Gift;
 import memory.AnnualChanges;
 import memory.InitialData;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import scores.AverageScoreStrategy;
-import scores.AverageScoreStrategyFactory;
 import updates.ChangeOfTheYear;
 
-import java.util.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import scores.AverageScoreStrategy;
+import scores.AverageScoreStrategyFactory;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class Santa {
+import static common.Constants.TEEN_NUMBER;
+
+public final class Santa {
     private static Santa santa = null;
     private int noYears = 0;
     private Double santasBudget = 0.0;
@@ -30,11 +44,11 @@ public class Santa {
     private Santa() {
     }
 
-    public void setSantasBudget(Double santasBudget) {
+    public void setSantasBudget(final Double santasBudget) {
         this.santasBudget = santasBudget;
     }
 
-    public void setNoYears(int noYears) {
+    public void setNoYears(final int noYears) {
         this.noYears = noYears;
     }
 
@@ -57,8 +71,9 @@ public class Santa {
     }
 
     public void addNewChildren(final ChangeOfTheYear change) {
-        if (actualYear == 0 || change.getNewChildren() == null)
+        if (actualYear == 0 || change.getNewChildren() == null) {
             return;
+        }
 
         for (Child child : change.getNewChildren()) {
             children.add(child);
@@ -66,7 +81,7 @@ public class Santa {
     }
 
     public void deleteYoungAdults() {
-        children.removeIf(child -> child.getAge() > 18);
+        children.removeIf(child -> child.getAge() > TEEN_NUMBER);
     }
 
     public void sortChildren() {
@@ -77,17 +92,19 @@ public class Santa {
 
     public void sortGifts() {
         Comparator<Gift> priceComparator = Comparator.comparing(Gift::getPrice);
-        Comparator<Gift> categoryComparator = Comparator.comparing(Gift::getCategory).thenComparing(priceComparator);
+        Comparator<Gift> categoryComparator = Comparator.comparing(Gift::getCategory)
+                                                        .thenComparing(priceComparator);
 
-        availableGifts = availableGifts.stream().sorted(categoryComparator).collect(Collectors.toList());
+        availableGifts = availableGifts.stream().sorted(categoryComparator)
+                                                .collect(Collectors.toList());
     }
 
     public void updateChildren(final ChangeOfTheYear change) {
         if (actualYear == 0 || change.getNewUpdates() == null) {
             return;
         }
-        List<ChildUpdates> updates = change.getNewUpdates();
 
+        List<ChildUpdates> updates = change.getNewUpdates();
         for (ChildUpdates update : updates) {
             Child updatedChild = null;
             for (Child child : children) {
@@ -173,8 +190,8 @@ public class Santa {
 
             for (String preferredGift : preferences) {
                 for (Gift singleGift : availableGifts) {
-                    if (singleGift.getCategory().equals(preferredGift) &&
-                        singleGift.getPrice() < child.getAssignedBudget()) {
+                    if (singleGift.getCategory().equals(preferredGift)
+                            && singleGift.getPrice() < child.getAssignedBudget()) {
                         child.getReceivedGifts().add(singleGift);
                         child.setBudget(child.getAssignedBudget()
                                 - singleGift.getPrice());
@@ -235,7 +252,11 @@ public class Santa {
         return annualChildrenJSON;
     }
 
-    public void addInitialData(InitialDataInput input) {
+    public void addInitialData(final InitialDataInput input) {
+        if (input == null) {
+            return;
+        }
+
         List<ChildrenInput> childrenInput = input.getChildrenList();
         List<GiftInput> giftsInput = input.getGiftsList();
         List<Child> childrenList = santa.addChildren(childrenInput);
@@ -246,7 +267,11 @@ public class Santa {
         initialData = new InitialData(childrenList, giftsList);
     }
 
-    public void addAnnualChanges(AnnualChangesInput input) {
+    public void addAnnualChanges(final AnnualChangesInput input) {
+        if (input == null) {
+            return;
+        }
+
         List<ChangeOfTheYearInput> changesInput = input.getChanges();
         List<ChangeOfTheYear> changes = new ArrayList<>();
 
@@ -267,8 +292,8 @@ public class Santa {
         annualChanges = new AnnualChanges(changes);
     }
 
-    public ArrayList<Child> addChildren(List<ChildrenInput> childrenInput) {
-        ArrayList<Child> children = new ArrayList<>();
+    public ArrayList<Child> addChildren(final List<ChildrenInput> childrenInput) {
+        ArrayList<Child> initialChildren = new ArrayList<>();
 
         for (ChildrenInput childInput : childrenInput) {
             Child newChild = new Child(
@@ -280,13 +305,13 @@ public class Santa {
                     childInput.getNiceScore(),
                     childInput.getGiftsPreferences()
             );
-            children.add(newChild);
+            initialChildren.add(newChild);
         }
 
-        return children;
+        return initialChildren;
     }
 
-    public ArrayList<Gift> addGifts(List<GiftInput> giftsInput) {
+    public ArrayList<Gift> addGifts(final List<GiftInput> giftsInput) {
         ArrayList<Gift> gifts = new ArrayList<>();
 
         for (GiftInput giftInput : giftsInput) {
@@ -302,7 +327,7 @@ public class Santa {
         return gifts;
     }
 
-    public ArrayList<ChildUpdates> addUpdates(List<ChildrenUpdatesInput> updatesInput) {
+    public ArrayList<ChildUpdates> addUpdates(final List<ChildrenUpdatesInput> updatesInput) {
         ArrayList<ChildUpdates> updates = new ArrayList<>();
 
         for (ChildrenUpdatesInput updateInput : updatesInput) {
@@ -322,18 +347,10 @@ public class Santa {
         ChangeOfTheYear newChange = new ChangeOfTheYear(santasBudget,
                 santa.getInitialData().getGiftsList(),
                 santa.getInitialData().getChildrenList(),
-                new ArrayList<ChildUpdates>()
+                new ArrayList<>()
         );
 
         return newChange;
-    }
-
-    public int getNoYears() {
-        return noYears;
-    }
-
-    public Double getSantasBudget() {
-        return santasBudget;
     }
 
     public InitialData getInitialData() {
@@ -348,29 +365,25 @@ public class Santa {
         return children;
     }
 
-    public List<Gift> getAvailableGifts() {
-        return availableGifts;
-    }
-
-    public void setActualYear(int actualYear) {
+    public void setActualYear(final int actualYear) {
         this.actualYear = actualYear;
     }
 
-    public void setAvailableGifts(List<Gift> availableGifts) {
+    public void setAvailableGifts(final List<Gift> availableGifts) {
         this.availableGifts = availableGifts;
     }
 
-    public void setChildren(List<Child> children) {
+    public void setChildren(final List<Child> children) {
         this.children = children;
     }
 
     @Override
     public String toString() {
-        return "{" +
-                "noYears=" + noYears +
-                ", santasBudget=" + santasBudget +
-                ", initialData=" + initialData +
-                ", annualChanges=" + annualChanges +
-                '}';
+        return "{"
+                + "noYears=" + noYears
+                + ", santasBudget=" + santasBudget
+                + ", initialData=" + initialData
+                + ", annualChanges=" + annualChanges
+                + '}';
     }
 }

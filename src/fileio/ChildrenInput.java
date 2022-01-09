@@ -3,14 +3,24 @@ package fileio;
 import java.util.ArrayList;
 
 public final class ChildrenInput {
+    /** id of a child to be recognised later */
     private final int id;
+    /** last name of the child */
     private final String lastName;
+    /** first name of the child */
     private final String firstName;
+    /** age of the child */
     private final int age;
+    /** city where a child lives (weirdos) */
     private final String city;
+    /** initial niceScore of a child */
     private final Double niceScore;
+    /** initial preferences of a child */
     private final ArrayList<String> giftsPreferences;
 
+    /**
+     * constructor for a children object to extract data
+     */
     public ChildrenInput(final int id,
                          final String lastName,
                          final String firstName,
@@ -57,14 +67,14 @@ public final class ChildrenInput {
 
     @Override
     public String toString() {
-        return "{" +
-                "id=" + id +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", age=" + age +
-                ", city='" + city + '\'' +
-                ", niceScore=" + niceScore +
-                ", giftsPreferences=" + giftsPreferences +
-                '}';
+        return "{"
+                + "id=" + id
+                + ", lastName='" + lastName + '\''
+                + ", firstName='" + firstName + '\''
+                + ", age=" + age
+                + ", city='" + city + '\''
+                + ", niceScore=" + niceScore
+                + ", giftsPreferences=" + giftsPreferences
+                + '}';
     }
 }

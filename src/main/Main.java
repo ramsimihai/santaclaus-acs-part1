@@ -1,14 +1,11 @@
 package main;
 
 import checker.Checker;
-import checker.Checkstyle;
 import common.Constants;
 import fileio.Input;
 import fileio.InputLoader;
-//import fileio.Writer;
 
 import fileio.Writer;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import updates.ChangeOfTheYear;
 import workshop.Santa;
@@ -20,7 +17,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-/** The entry point to this homework. It runs the checker that tests your implentation. */
+import static common.Constants.SECOND_ANGEL_NUMBER;
+
+/** The entry point to this homework. It runs the checker that tests the implementation. */
 public final class Main {
     /** for coding style */
     private Main() {
@@ -44,7 +43,7 @@ public final class Main {
         checker.deleteFiles(outputDirectory.listFiles());
 
         for (File file : Objects.requireNonNull(directory.listFiles())) {
-            String filename = file.getPath().substring(10);
+            String filename = file.getPath().substring(SECOND_ANGEL_NUMBER);
             String filepath = Constants.OUTPUT_PATH + filename;
             File out = new File(filepath);
 
@@ -55,7 +54,7 @@ public final class Main {
             }
         }
 
-        checker.calculateScore();
+        Checker.calculateScore();
     }
 
     /**

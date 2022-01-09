@@ -4,11 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeOfTheYearInput {
+    /** santaBudget every year */
     private final Double newSantaBudget;
+    /** a list of newGifts that the santa can deliver */
     private final List<GiftInput> newGifts;
+    /** a list of new children for delivering gifts to */
     private final List<ChildrenInput> newChildren;
+    /** a list of new updates to specified children */
     private final List<ChildrenUpdatesInput> newUpdates;
 
+    /**
+     * constructor for an annual change
+     */
     public ChangeOfTheYearInput(final Double newSantaBudget,
                                 final ArrayList<GiftInput> newGifts,
                                 final ArrayList<ChildrenInput> newChildren,
@@ -19,29 +26,29 @@ public class ChangeOfTheYearInput {
         this.newUpdates = newUpdates;
     }
 
-    public Double getNewSantaBudget() {
+    public final Double getNewSantaBudget() {
         return newSantaBudget;
     }
 
-    public List<ChildrenInput> getNewChildren() {
+    public final List<ChildrenInput> getNewChildren() {
         return newChildren;
     }
 
-    public List<ChildrenUpdatesInput> getNewUpdates() {
+    public final List<ChildrenUpdatesInput> getNewUpdates() {
         return newUpdates;
     }
 
-    public List<GiftInput> getNewGifts() {
+    public final List<GiftInput> getNewGifts() {
         return newGifts;
     }
 
     @Override
-    public String toString() {
-        return "{" +
-                "newSantaBudget=" + newSantaBudget +
-                ", newGifts=" + newGifts +
-                ", newChildren=" + newChildren +
-                ", newUpdates=" + newUpdates +
-                '}';
+    public final String toString() {
+        return "{"
+                + "newSantaBudget=" + newSantaBudget
+                + ", newGifts=" + newGifts
+                + ", newChildren=" + newChildren
+                + ", newUpdates=" + newUpdates
+                + '}';
     }
 }

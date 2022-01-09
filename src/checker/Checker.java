@@ -8,16 +8,21 @@ import java.io.File;
 import java.io.IOException;
 
 public final class Checker {
-
+    /**
+     * default constructor for checkstyle
+     */
     public Checker() {
-        //constructor for checkstyle
     }
 
+    /**
+     * method to deletes all files from a path
+     * @param directory
+     */
     public void deleteFiles(final File[] directory) {
         if (directory != null) {
             for (File file : directory) {
                 if (!file.delete()) {
-                    System.out.println("nu s-a sters");
+                    System.out.println("it didnt delete");
                 }
             }
         }

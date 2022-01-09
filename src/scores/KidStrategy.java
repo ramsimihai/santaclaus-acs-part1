@@ -3,22 +3,28 @@ package scores;
 import java.util.ArrayList;
 
 public class KidStrategy implements AverageScoreStrategy {
-    private int age;
-    private ArrayList<Double> niceScore;
+    private final ArrayList<Double> niceScore;
 
-    public KidStrategy(int age, ArrayList<Double> niceScore) {
-        this.age = age;
+    /**
+     * constructor for kiddo's strategy
+     * @param niceScore used for calculating the averageScore
+     */
+    public KidStrategy(final ArrayList<Double> niceScore) {
         this.niceScore = niceScore;
     }
 
+    /**
+     * getter of niceScore
+     * @return niceScore
+     */
     public ArrayList<Double> getNiceScore() {
         return niceScore;
     }
 
-    public int getAge() {
-        return age;
-    }
-
+    /**
+     * getter of the averageScore of a kiddo
+     * @return averageScore
+     */
     @Override
     public Double getAverageScore() {
         Double sum = 0.0;

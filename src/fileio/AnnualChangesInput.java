@@ -3,20 +3,25 @@ package fileio;
 import java.util.List;
 
 public class AnnualChangesInput {
+    /** list of changes that are going to be made in the future */
     private final List<ChangeOfTheYearInput> changes;
 
-    public AnnualChangesInput(List<ChangeOfTheYearInput> changes) {
+    /**
+     * constructor for annual changes input class
+     * @param changes
+     */
+    public AnnualChangesInput(final List<ChangeOfTheYearInput> changes) {
         this.changes = changes;
     }
 
-    public List<ChangeOfTheYearInput> getChanges() {
+    public final List<ChangeOfTheYearInput> getChanges() {
         return changes;
     }
 
     @Override
-    public String toString() {
-        return "{" +
-                "changes=" + changes +
-                '}';
+    public final String toString() {
+        return "{"
+                + "changes=" + changes
+                + '}';
     }
 }

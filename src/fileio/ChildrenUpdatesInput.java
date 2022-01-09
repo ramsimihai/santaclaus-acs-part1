@@ -3,10 +3,16 @@ package fileio;
 import java.util.ArrayList;
 
 public class ChildrenUpdatesInput {
+    /** id of the child that is going to be updated */
     private final int id;
+    /** new niceScore to add to child's list of scores */
     private final Double niceScore;
+    /** new preferences for gifts of a child */
     private final ArrayList<String> giftsPreferences;
 
+    /**
+     * constructor for a children update input object
+     */
     public ChildrenUpdatesInput(final int id,
                                 final Double niceScore,
                                 final ArrayList<String> giftsPreferences) {
@@ -15,24 +21,24 @@ public class ChildrenUpdatesInput {
         this.giftsPreferences = giftsPreferences;
     }
 
-    public ArrayList<String> getGiftsPreferences() {
+    public final ArrayList<String> getGiftsPreferences() {
         return giftsPreferences;
     }
 
-    public Double getNiceScore() {
+    public final Double getNiceScore() {
         return niceScore;
     }
 
-    public int getId() {
+    public final int getId() {
         return id;
     }
 
     @Override
-    public String toString() {
-        return "{" +
-                "id=" + id +
-                ", niceScore=" + niceScore +
-                ", giftsPreferences=" + giftsPreferences +
-                '}';
+    public final String toString() {
+        return "{"
+                + "id=" + id
+                + ", niceScore=" + niceScore
+                + ", giftsPreferences=" + giftsPreferences
+                + '}';
     }
 }
