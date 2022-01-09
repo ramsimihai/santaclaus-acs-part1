@@ -146,12 +146,18 @@ __Delivery__
 There are 6 big steps to do the delivery in one year:
 
 (1) -> makes children changes
+    
 (2) -> makes gift changes
+    
 (3) -> calculates the averageScore & initializes the budget assigned to every children
+    
 (4) -> delivering the gifts to every children of the list
+    
 (5) -> extracts the list of children and prepare it for output
+    
 (6) -> increments the age of kiddos (for the next year)
 
+    
 [ (1) ]
 -> adds new children to the list (if it is the initial year it wouldnt happen)
 -> delete young adults from the list of children
