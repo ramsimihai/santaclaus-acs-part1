@@ -160,28 +160,39 @@ There are 6 big steps to do the delivery in one year:
     
 [ (1) ]
 -> adds new children to the list (if it is the initial year it wouldnt happen)
+    
 -> delete young adults from the list of children
+    
 -> sort the children (the children might be unordered, but in the tests wouldnt happen)
+    
 -> update every child with the new info (if the child is found in the list)
 
 [ (2) ]
 -> add new gifts to the list (if it is the initial year it wouldnt happen)
+    
 -> sort gifts in function of category and ascending price cause the children gets the lowest
 priced gifts from the category preferred by them
 
 [ (3) ]
 -> calculates the averageScore of every type of children by using a Strategy & Factory pattern
 mentioned before
+    
 -> initialize the budget from where a child can get a priced gift
 
 [ (4) ]
 -> calculates the actual delivery of gifts to every children in that year
+    
 -> the actual delivery works like this:
+    
     -> iterate through the list of kiddos
+    
     -> clear the list of received gifts of every kiddo (cause this is a new year)
+    
     -> iterate through prefferences of every kiddos & then through the list of available
     gifts
+    
         -> if the gift is wanted add it to the children received gifts list
+    
         -> decrease the assigned budget of that child to give him another gift
 
 [ (5) ]
