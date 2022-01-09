@@ -12,6 +12,7 @@ public final class Constants {
     public static final Integer MAXIMUM_ERROR_CHECKSTYLE = 30;
     public static final Integer CHECKSTYLE_POINTS = 10;
     public static final Integer TESTS_NUMBER_SMALL = 15;
+    public static final Double ANGEL_NUMBER = -66.6;
 
     private Constants() {
         //constructor for checkstyle

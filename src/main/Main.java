@@ -7,7 +7,9 @@ import fileio.Input;
 import fileio.InputLoader;
 //import fileio.Writer;
 
+import fileio.Writer;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import updates.ChangeOfTheYear;
 import workshop.Santa;
 
@@ -43,10 +45,8 @@ public final class Main {
 
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             String filename = file.getPath().substring(10);
-            System.out.println(filename);
             String filepath = Constants.OUTPUT_PATH + filename;
             File out = new File(filepath);
-            System.out.println(filepath);
 
             boolean isCreated = out.createNewFile();
 
@@ -67,20 +67,20 @@ public final class Main {
         InputLoader inputLoader = new InputLoader(filePath1);
         Input input = inputLoader.readData();
 
-//        Writer fileWriter = new Writer(filePath2);
-//        JSONArray arrayResult;
+        Writer fileWriter = new Writer(filePath2);
+        JSONObject objectResult = new JSONObject();
+
         Santa santa = Santa.getInstance();
         santa.setSantasBudget(input.getSantasBudget());
         santa.setNoYears(input.getNoYears());
-        santa.setActualYear(0);
         santa.addInitialData(input.getInitialData());
         santa.addAnnualChanges(input.getAnnualChanges());
 
         ChangeOfTheYear initialChange = santa.addChange();
         santa.getAnnualChanges().getChanges().add(0, initialChange);
+        santa.setActualYear(0);
 
-        santa.startDelivery();
-//
-//        fileWriter.closeJSON(arrayResult);
+        objectResult.put("annualChildren", santa.startDelivery());
+        fileWriter.closeJSON(objectResult);
     }
 }

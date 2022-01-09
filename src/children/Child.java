@@ -2,13 +2,15 @@ package children;
 
 import fileio.ChildrenInput;
 import gifts.Gift;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import scores.AverageScoreStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Child {
-    private final int id;
+    private int id;
     private final String lastName;
     private final String firstName;
     private int age;
@@ -123,6 +125,46 @@ public class Child {
 
     public void setInitialBudget(Double initialBudget) {
         this.initialBudget = initialBudget;
+    }
+
+    public JSONObject getJSON() {
+        JSONObject newChildJSON = new JSONObject();
+
+        newChildJSON.put("id", id);
+        newChildJSON.put("lastName", lastName);
+        newChildJSON.put("firstName", firstName);
+        newChildJSON.put("city", city);
+        newChildJSON.put("age", age);
+
+        JSONArray giftPreferencesJSON = new JSONArray();
+        for (String preference : giftsPreferences) {
+            giftPreferencesJSON.add(preference);
+        }
+        newChildJSON.put("giftsPreferences", giftPreferencesJSON);
+        newChildJSON.put("averageScore", averageScore);
+
+        JSONArray niceScoreHistoryJSON = new JSONArray();
+        for (Double score : niceScore) {
+            niceScoreHistoryJSON.add(score);
+        }
+        newChildJSON.put("niceScoreHistory", niceScoreHistoryJSON);
+
+        newChildJSON.put("assignedBudget", initialBudget);
+
+        JSONArray receivedGiftsJSON = new JSONArray();
+        for (Gift gift : receivedGifts) {
+            JSONObject receivedGiftJSON = new JSONObject();
+
+            receivedGiftJSON.put("productName", gift.getProductName());
+            receivedGiftJSON.put("price", gift.getPrice());
+            receivedGiftJSON.put("category", gift.getCategory());
+
+            receivedGiftsJSON.add(receivedGiftJSON);
+        }
+
+        newChildJSON.put("receivedGifts", receivedGiftsJSON);
+
+        return newChildJSON;
     }
 
     @Override

@@ -6,6 +6,8 @@ import fileio.*;
 import gifts.Gift;
 import memory.AnnualChanges;
 import memory.InitialData;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import scores.AverageScoreStrategy;
 import scores.AverageScoreStrategyFactory;
 import updates.ChangeOfTheYear;
@@ -48,9 +50,6 @@ public class Santa {
     }
 
     public void incrementsAge() {
-        if (actualYear == 0) {
-            return;
-        }
 
         for (Child child : children) {
             child.setAge(child.getAge() + 1);
@@ -100,9 +99,10 @@ public class Santa {
             }
 
             if (updatedChild != null) {
-                if (update.getNiceScore() != 0.0) {
+                if (update.getNiceScore() != null) {
                     updatedChild.getNiceScore().add(update.getNiceScore());
                 }
+
 
                 List<String> preferences = updatedChild.getGiftsPreferences();
 
@@ -178,7 +178,7 @@ public class Santa {
                         child.getReceivedGifts().add(singleGift);
                         child.setBudget(child.getAssignedBudget()
                                 - singleGift.getPrice());
-// ai grija
+
                         break;
                     }
                 }
@@ -186,10 +186,26 @@ public class Santa {
         }
     }
 
-    public void startDelivery() {
-        for (actualYear = 0; actualYear <= noYears; actualYear++) {
+    public JSONArray getOutput() {
+        JSONArray childrenJSON = new JSONArray();
+        for (Child child : children) {
+            JSONObject childJSON = child.getJSON();
+            childrenJSON.add(childJSON);
+        }
+
+        return childrenJSON;
+    }
+
+    public int getActualYear() {
+        return actualYear;
+    }
+
+    public JSONArray startDelivery() {
+        JSONArray annualChildrenJSON = new JSONArray();
+        actualYear = 0;
+        while (true) {
             ChangeOfTheYear annualChange = annualChanges.getChanges().get(actualYear);
-            incrementsAge();
+
             addNewChildren(annualChange);
             deleteYoungAdults();
             sortChildren();
@@ -203,10 +219,20 @@ public class Santa {
             initializeBudget(annualChange);
 
             yearDelivery();
-            for (Child child : children) {
-        System.out.println(child);
+
+            JSONObject objJSON = new JSONObject();
+            objJSON.put("children", getOutput());
+            annualChildrenJSON.add(objJSON);
+
+            if (actualYear == noYears) {
+                break;
             }
+
+            incrementsAge();
+            actualYear++;
         }
+
+        return annualChildrenJSON;
     }
 
     public void addInitialData(InitialDataInput input) {

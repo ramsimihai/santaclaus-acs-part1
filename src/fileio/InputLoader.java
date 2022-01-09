@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static common.Constants.ANGEL_NUMBER;
+
 public class InputLoader {
     private final String inputPath;
 
@@ -103,7 +105,7 @@ public class InputLoader {
                         if (((JSONObject) jsonChildrenUpdate).get("niceScore") == null) {
                             childrenUpdates.add(new ChildrenUpdatesInput(
                                     Integer.parseInt(((JSONObject) jsonChildrenUpdate).get("id").toString()),
-                                    0.0,
+                                    null,
                                     Utils.convertJSONArray((JSONArray) ((JSONObject) jsonChildrenUpdate).get("giftsPreferences"))
                             ));
                         } else {
