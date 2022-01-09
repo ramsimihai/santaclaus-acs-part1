@@ -29,25 +29,44 @@ import java.util.stream.Collectors;
 
 import static common.Constants.TEEN_NUMBER;
 
+/** singleton santa, but we are santa and we are evil (jk) */
 public final class Santa {
+    /** the instance of the singleton */
     private static Santa santa = null;
+    /** the noYears that the santa's gone and the program will do the job */
     private int noYears = 0;
+    /** santas budget per year*/
     private Double santasBudget = 0.0;
+    /** initial data used to extract datas and add them to annual changes
+     * for easy implementation of delivery concept */
     private InitialData initialData = new InitialData();
+    /** annual changes that will be done over the noYears */
     private AnnualChanges annualChanges = new AnnualChanges();
+    /** list of all santa's good kiddos*/
     private List<Child> children = new ArrayList<>();
+    /** list of available gifts to be delivered to good kiddos */
     private List<Gift> availableGifts = new ArrayList<>();
+    /** a field that will contain how many years passed since the santa's gone*/
     private int actualYear = 0;
+    /** a budgetUnit is just something to calculate the santas actual budget */
     private Double budgetUnit = 0.0;
-    private List<Child> rewardedChildren = new ArrayList<>();
 
+    /**
+     * private default constructor so that this should be a singleton
+     */
     private Santa() {
     }
 
+    /**
+     * setter of santas annual budget
+     */
     public void setSantasBudget(final Double santasBudget) {
         this.santasBudget = santasBudget;
     }
 
+    /**
+     * setter of noYears to work as Santa's replacement
+     */
     public void setNoYears(final int noYears) {
         this.noYears = noYears;
     }
@@ -63,13 +82,19 @@ public final class Santa {
         return santa;
     }
 
+    /**
+     * increments ages of all childrens from the list
+     */
     public void incrementsAge() {
-
         for (Child child : children) {
             child.setAge(child.getAge() + 1);
         }
     }
 
+    /**
+     * adds all the new children from the list of new kiddos of the annual change
+     * @param change of the Year
+     */
     public void addNewChildren(final ChangeOfTheYear change) {
         if (actualYear == 0 || change.getNewChildren() == null) {
             return;
@@ -80,16 +105,30 @@ public final class Santa {
         }
     }
 
+    /**
+     * deletes all the young adults from the list of children
+     * cause they are naughty kiddos and dont need our gifts |-:-|
+     */
     public void deleteYoungAdults() {
         children.removeIf(child -> child.getAge() > TEEN_NUMBER);
     }
 
+    /**
+     * sort all the children in the list by the id
+     * this is redundant on the tests but there could be a possibility where in the list
+     * of new children, they wouldnt be ordered in ascending order by id (so here i am)
+     */
     public void sortChildren() {
         Comparator<Child> idComparator = Comparator.comparing(Child::getId);
 
         children = children.stream().sorted(idComparator).collect(Collectors.toList());
     }
 
+    /**
+     * sorts all the gifts from the list so that every first appareance of gifts from
+     * a specified category will be the lowest priced one and directly delivered to some weird
+     * kiddo
+     */
     public void sortGifts() {
         Comparator<Gift> priceComparator = Comparator.comparing(Gift::getPrice);
         Comparator<Gift> categoryComparator = Comparator.comparing(Gift::getCategory)
@@ -99,14 +138,22 @@ public final class Santa {
                                                 .collect(Collectors.toList());
     }
 
+    /**
+     * updates all the children given by the change of the year if they exists
+     * in santa's list
+     * @param change of the YEAR
+     */
     public void updateChildren(final ChangeOfTheYear change) {
         if (actualYear == 0 || change.getNewUpdates() == null) {
             return;
         }
 
+        // iterates through all the changes of the corresponding year
         List<ChildUpdates> updates = change.getNewUpdates();
         for (ChildUpdates update : updates) {
             Child updatedChild = null;
+
+            // iterates through list of the children and gets the corresponding child
             for (Child child : children) {
                 if (update.getId() == child.getId()) {
                     updatedChild = child;
@@ -115,22 +162,24 @@ public final class Santa {
                 }
             }
 
+            // update the niceScore
             if (updatedChild != null) {
                 if (update.getNiceScore() != null) {
                     updatedChild.getNiceScore().add(update.getNiceScore());
                 }
 
-
+                // gets the old preferences
                 List<String> preferences = updatedChild.getGiftsPreferences();
 
-                // lista noua
+                // new list of preferences
                 List<String> duplicatedNewPreferences = update.getGiftsPreferences();
-                // lista noua care e ok si all good
+                // unique list of preferences (from the new one)
                 List<String> uniqueNewPreferences = new ArrayList<>(
                         new LinkedHashSet<>(duplicatedNewPreferences));
 
+                // adds the every preference from the end of new preferences
+                // to the end of the old preferences
                 Collections.reverse(uniqueNewPreferences);
-
                 for (String preference : uniqueNewPreferences) {
                     if (preferences.contains(preference)) {
                         preferences.remove(preference);
@@ -142,6 +191,10 @@ public final class Santa {
         }
     }
 
+    /**
+     * adds new gifts in the list of the gifts
+     * @param change of the YEAR
+     */
     public void addNewGifts(final ChangeOfTheYear change) {
         if (actualYear == 0 || change.getNewGifts() == null) {
             return;
@@ -152,6 +205,11 @@ public final class Santa {
         }
     }
 
+    /**
+     * initialize the budget of santa in the corresponding year
+     * and also the budget given for every children
+     * @param change of the YEAR
+     */
     public void initializeBudget(final ChangeOfTheYear change) {
         santasBudget = change.getNewSantaBudget();
         Double overallAverageScore = 0.0;
@@ -165,12 +223,18 @@ public final class Santa {
             budgetUnit = santasBudget;
         }
 
+        // initializes the assignedBudget that is going to be used in delivery
+        // and also the initialBudget
         for (Child child : children) {
             child.setBudget(child.getAverageScore() * budgetUnit);
             child.setInitialBudget(child.getAverageScore() * budgetUnit);
         }
     }
 
+    /**
+     * assigns to every children a strategy in function of the category of ages
+     * then calculates the averageScore of every children
+     */
     public void getTypesOfChildren() {
         AverageScoreStrategyFactory factory = new AverageScoreStrategyFactory();
 
@@ -182,14 +246,19 @@ public final class Santa {
         }
     }
 
+    /**
+     * does a year delivery: clearing the old received gifts, gives to every child the lowest
+     * priced gift from the wanted categories in function of the assigned budget for his as#
+     */
     public void yearDelivery() {
-        rewardedChildren.clear();
         for (Child child : children) {
             child.getReceivedGifts().clear();
             ArrayList<String> preferences = child.getGiftsPreferences();
 
+            // iterates through child preferences
             for (String preferredGift : preferences) {
                 for (Gift singleGift : availableGifts) {
+                    // deliver gifts to his as#
                     if (singleGift.getCategory().equals(preferredGift)
                             && singleGift.getPrice() < child.getAssignedBudget()) {
                         child.getReceivedGifts().add(singleGift);
@@ -203,6 +272,10 @@ public final class Santa {
         }
     }
 
+    /**
+     * create the output in JSON format by maintaing a specified format
+     * @return a JSONArray used to build the output
+     */
     public JSONArray getOutput() {
         JSONArray childrenJSON = new JSONArray();
         for (Child child : children) {
@@ -213,30 +286,36 @@ public final class Santa {
         return childrenJSON;
     }
 
-    public int getActualYear() {
-        return actualYear;
-    }
-
+    /**
+     * MY JOB STARSTS! NOW! delivery in noYears gifts to good kiddos 100%
+     * @return a JSONArray used to build the output
+     */
     public JSONArray startDelivery() {
         JSONArray annualChildrenJSON = new JSONArray();
+
+        // iterates through years
         actualYear = 0;
         while (true) {
             ChangeOfTheYear annualChange = annualChanges.getChanges().get(actualYear);
 
+            // makes children changes
             addNewChildren(annualChange);
             deleteYoungAdults();
             sortChildren();
             updateChildren(annualChange);
 
-
+            // makes gifts changes
             addNewGifts(annualChange);
             sortGifts();
 
+            // calculates the averageScore and initializes the budget of santa & every children
             getTypesOfChildren();
             initializeBudget(annualChange);
 
+            // delivery of the corresponding year
             yearDelivery();
 
+            // extract the output
             JSONObject objJSON = new JSONObject();
             objJSON.put("children", getOutput());
             annualChildrenJSON.add(objJSON);
@@ -245,6 +324,7 @@ public final class Santa {
                 break;
             }
 
+            // increments the kiddos age cause this year has ended! HAPPY NEW YEAR!
             incrementsAge();
             actualYear++;
         }
@@ -252,6 +332,10 @@ public final class Santa {
         return annualChildrenJSON;
     }
 
+    /**
+     * add initial data from the extracted initial data input
+     * @param input aka an InitialData object that has the first year situation
+     */
     public void addInitialData(final InitialDataInput input) {
         if (input == null) {
             return;
@@ -267,6 +351,10 @@ public final class Santa {
         initialData = new InitialData(childrenList, giftsList);
     }
 
+    /**
+     * add the extracted annual changes to the database
+     * @param input aka an AnnualChanges object that has the all years situation
+     */
     public void addAnnualChanges(final AnnualChangesInput input) {
         if (input == null) {
             return;
@@ -292,6 +380,11 @@ public final class Santa {
         annualChanges = new AnnualChanges(changes);
     }
 
+    /**
+     * adds the children extracted from the input
+     * @param childrenInput aka list of initial children
+     * @return an ArrayList<Child> to be used later
+     */
     public ArrayList<Child> addChildren(final List<ChildrenInput> childrenInput) {
         ArrayList<Child> initialChildren = new ArrayList<>();
 
@@ -311,6 +404,11 @@ public final class Santa {
         return initialChildren;
     }
 
+    /**
+     * adds the gifts extracted from the input
+     * @param giftsInput aka list of initial gifts
+     * @return an ArrayList<Gift> to be used later
+     */
     public ArrayList<Gift> addGifts(final List<GiftInput> giftsInput) {
         ArrayList<Gift> gifts = new ArrayList<>();
 
@@ -327,6 +425,11 @@ public final class Santa {
         return gifts;
     }
 
+    /**
+     * adds the children's updates extracted from the input
+     * @param updatesInput aka list of initial updates
+     * @return an ArrayList<ChildrenUpdates> to be used later
+     */
     public ArrayList<ChildUpdates> addUpdates(final List<ChildrenUpdatesInput> updatesInput) {
         ArrayList<ChildUpdates> updates = new ArrayList<>();
 
@@ -343,6 +446,10 @@ public final class Santa {
         return updates;
     }
 
+    /**
+     * adds a change of the YEAR (to add the Annual Changes)
+     * @return
+     */
     public ChangeOfTheYear addChange() {
         ChangeOfTheYear newChange = new ChangeOfTheYear(santasBudget,
                 santa.getInitialData().getGiftsList(),
@@ -353,30 +460,51 @@ public final class Santa {
         return newChange;
     }
 
+    /**
+     * getter of initial data
+     */
     public InitialData getInitialData() {
         return initialData;
     }
 
+    /**
+     * getter of annual changes
+     */
     public AnnualChanges getAnnualChanges() {
         return annualChanges;
     }
 
+    /**
+     * getter of the list of children
+     */
     public List<Child> getChildren() {
         return children;
     }
 
+    /**
+     * setter of actual year
+     */
     public void setActualYear(final int actualYear) {
         this.actualYear = actualYear;
     }
 
+    /**
+     * setter of availableGifts
+     */
     public void setAvailableGifts(final List<Gift> availableGifts) {
         this.availableGifts = availableGifts;
     }
 
+    /**
+     * setter of the list of children
+     */
     public void setChildren(final List<Child> children) {
         this.children = children;
     }
 
+    /**
+     * toString method for... (ok, you got me, i dont freakin' know)
+     */
     @Override
     public String toString() {
         return "{"

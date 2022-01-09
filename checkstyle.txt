@@ -1,21 +1,2 @@
 Starting audit...
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:66:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:73:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:83:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:87:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:93:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:102:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:145:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:155:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:174:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:185:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:206:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:220:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:255:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:270:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:295:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:314:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:330:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] /home/student/santaclaus-acs-part1/./src/workshop/Santa.java:346:5: Missing a Javadoc comment. [MissingJavadocMethod]
 Audit done.
-Checkstyle ends with 18 errors.
